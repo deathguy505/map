@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -11,7 +12,7 @@
         body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         #map { height: 100vh; width: 100vw; background: #1a1a1a; }
         
-        /* Стилізація темної теми мапи та поп-апів */
+      
         .leaflet-popup-content-wrapper {
             background: #2c2c2c;
             color: #fff;
@@ -30,7 +31,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-    
+        
         const regionCoords = {
             "Вінницька": [49.23, 28.46],
             "Волинська": [51.21, 24.64],
@@ -61,7 +62,46 @@
             "Севастополь": [44.61, 33.52]
         };
 
-      
+       
         const map = L.map('map').setView([48.37, 31.16], 6);
 
+    
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO'
+        }).addTo(map);
+
        
+        async function updateMap() {
+            try {
+           
+                const response = await fetch(`data.json?t=${Date.now()}`);
+                const threats = await response.json();
+
+                
+                threats.forEach(item => {
+                    const coords = regionCoords[item.location];
+                    
+                    if (coords) {
+                        
+                        const lat = coords[0] + (Math.random() - 0.5) * 0.2;
+                        const lng = coords[1] + (Math.random() - 0.5) * 0.2;
+
+                        L.marker([lat, lng]).addTo(map)
+                            .bindPopup(`
+                                <div class="threat-label">⚠️ ${item.target}</div>
+                                <b>Область:</b> ${item.location}<br>
+                                <b>Напрямок:</b> ${item.direction}
+                            `)
+                            .openPopup();
+                    }
+                });
+            } catch (error) {
+                console.error('Помилка завантаження даних:', error);
+            }
+        }
+
+     
+        updateMap();
+    </script>
+</body>
+</html>
