@@ -1,107 +1,49 @@
+// 1. Координати (об'єкт має бути один, назва має збігатися)
+const coords = {
+    "Вінницька": [49.23, 28.46],
+    "Волинська": [51.21, 24.64],
+    "Дніпропетровська": [48.46, 35.04],
+    "Донецька": [48.01, 37.80],
+    "Житомирська": [50.25, 28.66],
+    "Закарпатська": [48.62, 22.28],
+    "Запорізька": [47.83, 35.13],
+    "Івано-Франківська": [48.92, 24.71],
+    "Київська": [50.45, 30.52],
+    "Кіровоградська": [48.51, 32.26],
+    "Крим": [44.94, 34.10],
+    "Луганська": [48.57, 39.33],
+    "Львівська": [49.83, 24.02],
+    "Миколаївська": [46.97, 31.99],
+    "Одеська": [46.48, 30.72],
+    "Полтавська": [49.58, 34.55],
+    "Рівненська": [50.61, 26.25],
+    "Сумська": [50.90, 34.79],
+    "Тернопільська": [49.55, 25.59],
+    "Харківська": [49.99, 36.23],
+    "Херсонська": [46.63, 32.61],
+    "Хмельницька": [49.42, 26.98],
+    "Черкаська": [49.44, 32.05],
+    "Чернівецька": [48.29, 25.93],
+    "Чернігівська": [51.49, 31.28],
+    "Київ": [50.45, 30.52],
+    "Севастополь": [44.61, 33.52]
+};
 
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моніторинг повітряних цілей</title>
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        #map { height: 100vh; width: 100vw; background: #1a1a1a; }
-        
-      
-        .leaflet-popup-content-wrapper {
-            background: #2c2c2c;
-            color: #fff;
-            border-radius: 8px;
-        }
-        .leaflet-popup-tip { background: #2c2c2c; }
-        .threat-label {
-            font-weight: bold;
-            color: #ff4d4d;
-        }
-    </style>
-</head>
-<body>
+// 2. Ініціалізація мапи (цього рядка немає на твоєму скріні, він обов'язковий!)
+const map = L.map('map').setView([48.37, 31.16], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    <div id="map"></div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        
-        const regionCoords = {
-            "Вінницька": [49.23, 28.46],
-            "Волинська": [51.21, 24.64],
-            "Дніпропетровська": [48.46, 35.04],
-            "Донецька": [48.01, 37.80],
-            "Житомирська": [50.25, 28.66],
-            "Закарпатська": [48.62, 22.28],
-            "Запорізька": [47.83, 35.13],
-            "Івано-Франківська": [48.92, 24.71],
-            "Київська": [50.45, 30.52],
-            "Кіровоградська": [48.51, 32.26],
-            "Крим": [44.94, 34.10],
-            "Луганська": [48.57, 39.33],
-            "Львівська": [49.83, 24.02],
-            "Миколаївська": [46.97, 31.99],
-            "Одеська": [46.48, 30.72],
-            "Полтавська": [49.58, 34.55],
-            "Рівненська": [50.61, 26.25],
-            "Сумська": [50.90, 34.79],
-            "Тернопільська": [49.55, 25.59],
-            "Харківська": [49.99, 36.23],
-            "Херсонська": [46.63, 32.61],
-            "Хмельницька": [49.42, 26.98],
-            "Черкаська": [49.44, 32.05],
-            "Чернівецька": [48.29, 25.93],
-            "Чернігівська": [51.49, 31.28],
-            "Київ": [50.45, 30.52],
-            "Севастополь": [44.61, 33.52]
-        };
-
-       
-        const map = L.map('map').setView([48.37, 31.16], 6);
-
-    
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap &copy; CARTO'
-        }).addTo(map);
-
-       
-        async function updateMap() {
-            try {
-           
-                const response = await fetch(`data.json?t=${Date.now()}`);
-                const threats = await response.json();
-
-                
-                threats.forEach(item => {
-                    const coords = regionCoords[item.location];
-                    
-                    if (coords) {
-                        
-                        const lat = coords[0] + (Math.random() - 0.5) * 0.2;
-                        const lng = coords[1] + (Math.random() - 0.5) * 0.2;
-
-                        L.marker([lat, lng]).addTo(map)
-                            .bindPopup(`
-                                <div class="threat-label">⚠️ ${item.target}</div>
-                                <b>Область:</b> ${item.location}<br>
-                                <b>Напрямок:</b> ${item.direction}
-                            `)
-                            .openPopup();
-                    }
-                });
-            } catch (error) {
-                console.error('Помилка завантаження даних:', error);
+// 3. Завантаження даних
+fetch('data.json')
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(threat => {
+            // Використовуємо правильну назву об'єкта - coords
+            const position = coords[threat.location];
+            if (position) {
+                L.marker(position).addTo(map)
+                    .bindPopup(`<b>${threat.target}</b><br>Напрямок: ${threat.direction}`);
             }
-        }
+        });
+    });
 
-     
-        updateMap();
-    </script>
-</body>
-</html>
