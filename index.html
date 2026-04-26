@@ -44,21 +44,14 @@
 }
         };
 
-        const map = L.map('map').setView([48.37, 31.16], 6); // Центр України
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-        // Завантажуємо дані, які записав n8n
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(item => {
-                    const pos = coords[item.location];
-                    if (pos) {
-                        L.marker(pos).addTo(map)
-                            .bindPopup(`<b>${item.target}</b><br>Напрямок: ${item.direction}`);
-                    }
-                });
-            });
-    </script>
-</body>
-</html>
+    fetch('data.json')
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(threat => {
+            const position = regionCoords[threat.location];
+            if (position) {
+                L.marker(position).addTo(map)
+                    .bindPopup(`<b>${threat.target}</b><br>Напрямок: ${threat.direction}`);
+            }
+        });
+    });
