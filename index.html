@@ -1,4 +1,36 @@
-// 1. Координати (об'єкт має бути один, назва має збігатися)
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моніторинг повітряних цілей</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        #map { height: 100vh; width: 100vw; background: #1a1a1a; }
+        
+     
+        .leaflet-popup-content-wrapper {
+            background: #2c2c2c;
+            color: #fff;
+            border-radius: 8px;
+        }
+        .leaflet-popup-tip { background: #2c2c2c; }
+        .threat-label {
+            font-weight: bold;
+            color: #ff4d4d;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      
 const coords = {
     "Вінницька": [49.23, 28.46],
     "Волинська": [51.21, 24.64],
@@ -29,16 +61,16 @@ const coords = {
     "Севастополь": [44.61, 33.52]
 };
 
-// 2. Ініціалізація мапи (цього рядка немає на твоєму скріні, він обов'язковий!)
+
 const map = L.map('map').setView([48.37, 31.16], 6);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-// 3. Завантаження даних
+
 fetch('data.json')
     .then(res => res.json())
     .then(data => {
         data.forEach(threat => {
-            // Використовуємо правильну назву об'єкта - coords
+           
             const position = coords[threat.location];
             if (position) {
                 L.marker(position).addTo(map)
@@ -46,4 +78,3 @@ fetch('data.json')
             }
         });
     });
-
