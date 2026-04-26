@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Моніторинг Повітряних Цілей</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; background: #242424; }
+        .popup-content { font-family: sans-serif; font-size: 14px; }
+    </style>
+</head>
+<body>
 
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Створюємо карту та фокусуємо на Україні
+        var map = L.map('map').setView([48.3794, 31.1656], 6);
+
+        // Додаємо темний шар (Dark Mode), він краще підходить для тактичних задач
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO'
+        }).addTo(map);
+
+        // Функція для завантаження даних
+        async function loadTargets() {
+            try {
+                // n8n оновить цей файл на GitHub
+                const response = await fetch('data.json');
+                const targets = await response.json();
+
+                targets.forEach(target => {
+                    // Перевіряємо наявність координат перед створенням маркера
+                    if (target.lat && target.lng) {
+                        L.marker([target.lat, target.lng])
+                            .addTo(map)
+                            .bindPopup(`
+                                <div class="popup-content">
+                                    <strong>Ціль:</strong> ${target.name || 'Невідомо'}<br>
+                                    <strong>Тип:</strong> ${target.type || 'БПЛА/Ракета'}<br>
+                                    <strong>Час:</strong> ${new Date().toLocaleTimeString()}
+                                </div>
+                            `);
+                    }
+                });
+            } catch (error) {
+                console.error("Помилка завантаження даних:", error);
+            }
+        }
+
+        // Запускаємо завантаження
+        loadTargets();
+    </script>
+</body>
+</html>
