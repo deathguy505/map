@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSINT Моніторинг Повітряних Цілей</title>
+    <title>𝛀DEATHWATCH𝛀</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
@@ -20,41 +20,41 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Створюємо карту та фокусуємо на Україні
+      
         var map = L.map('map').setView([48.3794, 31.1656], 6);
 
-        // Додаємо темний шар (Dark Mode), він краще підходить для тактичних задач
+        
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap &copy; CARTO'
         }).addTo(map);
 
-        // Функція для завантаження даних
+     
         async function loadTargets() {
             try {
-                // n8n оновить цей файл на GitHub
-                const response = await fetch('data.json');
+               
+                const response = await fetch('https://raw.githubusercontent.com/deathguy505/map/refs/heads/main/index.html?token=GHSAT0AAAAAAD3QW7PEIDY7DT4527JCKYRM2POIDPA');
                 const targets = await response.json();
 
                 targets.forEach(target => {
-                    // Перевіряємо наявність координат перед створенням маркера
+              
                     if (target.lat && target.lng) {
                         L.marker([target.lat, target.lng])
                             .addTo(map)
                             .bindPopup(`
                                 <div class="popup-content">
-                                    <strong>Ціль:</strong> ${target.name || 'Невідомо'}<br>
-                                    <strong>Тип:</strong> ${target.type || 'БПЛА/Ракета'}<br>
-                                    <strong>Час:</strong> ${new Date().toLocaleTimeString()}
+                                    <strong>TARGET:</strong> ${target.name || 'UNKNOWN'}<br>
+                                    <strong>TYPE:</strong> ${target.type || 'DRONE/ROCKET'}<br>
+                                    <strong>TIME:</strong> ${new Date().toLocaleTimeString()}
                                 </div>
                             `);
                     }
                 });
             } catch (error) {
-                console.error("Помилка завантаження даних:", error);
+                console.error("ERROR!:", error);
             }
         }
 
-        // Запускаємо завантаження
+       
         loadTargets();
     </script>
 </body>
