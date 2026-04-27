@@ -11,7 +11,6 @@
         body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         #map { height: 100vh; width: 100vw; background: #0f172a; }
         
-        /* Темна тема для поп-апів */
         .leaflet-popup-content-wrapper {
             background: #1e293b;
             color: #f1f5f9;
@@ -20,7 +19,7 @@
         }
         .leaflet-popup-tip { background: #1e293b; }
         
-        /* Стилізація іконок (опціонально) */
+      
         .threat-icon {
             background: #ef4444;
             border: 2px solid white;
@@ -35,57 +34,72 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const coords = {
-            "Вінницька": [49.23, 28.46], "Волинська": [51.21, 24.64],
-            "Дніпропетровська": [48.46, 35.04], "Донецька": [48.01, 37.80],
-            "Житомирська": [50.25, 28.66], "Закарпатська": [48.62, 22.28],
-            "Запорізька": [47.83, 35.13], "Івано-Франківська": [48.92, 24.71],
-            "Київська": [50.45, 30.52], "Кіровоградська": [48.51, 32.26],
-            "Крим": [44.94, 34.10], "Луганська": [48.57, 39.33],
-            "Львівська": [49.83, 24.02], "Миколаївська": [46.97, 31.99],
-            "Одеська": [46.48, 30.72], "Полтавська": [49.58, 34.55],
-            "Рівненська": [50.61, 26.25], "Сумська": [50.90, 34.79],
-            "Тернопільська": [49.55, 25.59], "Харківська": [49.99, 36.23],
-            "Херсонська": [46.63, 32.61], "Хмельницька": [49.42, 26.98],
-            "Черкаська": [49.44, 32.05], "Чернівецька": [48.29, 25.93],
-            "Чернігівська": [51.49, 31.28], "Київ": [50.45, 30.52],
-            "Севастополь": [44.61, 33.52]
-        };
+  
+const coords = {
+    "Вінницька": [49.23, 28.46], "Волинська": [51.21, 24.64],
+    "Дніпропетровська": [48.46, 35.04], "Донецька": [48.01, 37.80],
+    "Житомирська": [50.25, 28.66], "Закарпатська": [48.62, 22.28],
+    "Запорізька": [47.83, 35.13], "Івано-Франківська": [48.92, 24.71],
+    "Київська": [50.45, 30.52], "Кіровоградська": [48.51, 32.26],
+    "Крим": [44.94, 34.10], "Луганська": [48.57, 39.33],
+    "Львівська": [49.83, 24.02], "Миколаївська": [46.97, 31.99],
+    "Одеська": [46.48, 30.72], "Полтавська": [49.58, 34.55],
+    "Рівненська": [50.61, 26.25], "Сумська": [50.90, 34.79],
+    "Тернопільська": [49.55, 25.59], "Харківська": [49.99, 36.23],
+    "Херсонська": [46.63, 32.61], "Хмельницька": [49.42, 26.98],
+    "Черкаська": [49.44, 32.05], "Чернівецька": [48.29, 25.93],
+    "Чернігівська": [51.49, 31.28], "Київ": [50.45, 30.52],
+    "Севастополь": [44.61, 33.52]
+};
 
-        // Ініціалізація карти
-        const map = L.map('map').setView([48.37, 31.16], 6);
 
-        // Використовуємо темну тему CartoDB (виглядає краще для "deathwatch")
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+const map = L.map('map', {
+    zoomControl: false 
+}).setView([48.37, 31.16], 6);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+
+function addThreat(threat) {
+    const position = coords[threat.location];
+    if (position) {
+   
+        const pulse = L.circleMarker(position, {
+            radius: 10,
+            fillColor: "#ff0000",
+            color: "#ff0000",
+            weight: 2,
+            opacity: 0.5,
+            fillOpacity: 0.4,
+            className: 'pulse-animation' 
         }).addTo(map);
 
-        // Завантаження даних
-        fetch('data.json')
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(threat => {
-                    const position = coords[threat.location];
-                    if (position) {
-                        // Створення кастомного маркера (червоне коло)
-                        const marker = L.circleMarker(position, {
-                            radius: 8,
-                            fillColor: "#ff4d4d",
-                            color: "#fff",
-                            weight: 1,
-                            opacity: 1,
-                            fillOpacity: 0.8
-                        }).addTo(map);
+       
+        const marker = L.circleMarker(position, {
+            radius: 5,
+            fillColor: "#ffffff",
+            color: "#ff0000",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 1
+        }).addTo(map);
 
-                        marker.bindPopup(`
-                            <strong style="color: #ff4d4d; font-size: 1.1em;">${threat.target}</strong><br>
-                            <b>Тип:</b> ${threat.type || 'Невідомо'}<br>
-                            <b>Напрямок:</b> ${threat.direction}
-                        `);
-                    }
-                });
-            })
-            .catch(err => console.error("Помилка завантаження даних:", err));
+        marker.bindPopup(`
+            <div style="text-align:center;">
+                <b style="color:red; font-size:14px;">${threat.target}</b><br>
+                <span style="color:#ccc;">Напрямок: ${threat.direction}</span>
+            </div>
+        `);
+    }
+}
+
+
+fetch('./data.json')
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(threat => addThreat(threat));
+    })
+    .catch(err => console.error("Не вдалося завантажити цілі:", err));
     </script>
 </body>
 </html>
