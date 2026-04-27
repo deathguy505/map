@@ -1,4 +1,12 @@
-[[
-  { "location": "Київська", "target": "Крилаті ракети", "direction": "на Житомир" },
-  { "location": "Львівська", "target": "Шахед", "direction": "на Стрий" }
+[
+  {
+    "location": "Київська",
+    "target": "БпЛА",
+    "direction": "на Білу Церкву"
+  },
+  {
+    "location": "Харківська",
+    "target": "КАБ",
+    "direction": "на Харків"
+  }
 ]
