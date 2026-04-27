@@ -94,7 +94,7 @@ function addThreat(threat) {
 }
 
 
-fetch('/map/data.json')
+fetch('https://deathguy365.github.io/map/data.json')
     .then(res => res.json())
     .then(data => {
         data.forEach(threat => addThreat(threat));
