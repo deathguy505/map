@@ -1,1 +1,1 @@
-[{"location": "Харківська", "target": "Air bomb", "direction": "В напрямку Харкова та прилеглих населених пунктів"}, {"location": "Сумська", "target": "Drone", "direction": "Курсом на південний захід у бік Полтавщини"}, {"location": "Полтавська", "target": "Drone", "direction": "У напрямку Миргородського району"}]
+[{"location": "Полтавська", "target": "Drone", "direction": "Westward"}, {"location": "Сумська", "target": "Drone", "direction": "South-West"}, {"location": "Харківська", "target": "Aviation", "direction": "East"}]
