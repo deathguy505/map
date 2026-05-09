@@ -1,1 +1,1 @@
-[{"location": "Харківська", "target": "Air bomb", "direction": "пуски керованих авіаційних бомб тактичною авіацією"}, {"location": "Донецька", "target": "Aviation", "direction": "активність ворожої тактичної авіації на північно-східному напрямку"}]
+[{"location": "Сумська", "target": "Aviation\\Air bomb", "direction": "Північно-східний напрямок"}, {"location": "Харківська", "target": "Aviation\\Air bomb", "direction": "Активність тактичної авіації на сході"}]
